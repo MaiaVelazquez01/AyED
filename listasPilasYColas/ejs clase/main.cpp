@@ -6,6 +6,32 @@ struct Nodo {
     Nodo* sgte;
 };
 
+struct NodoP {
+    Producto info;
+    NodoP* sgte;
+};
+
+struct NodoH {
+    Reserva info;
+    Nodo* sgte;
+};
+
+struct Habitacion {
+    int id;
+    int cantN;
+    int cantReservas;
+};
+
+struct Reserva {
+    int idHabitacion;
+    int cantNoches;
+};
+
+struct Producto {
+    int id;
+    int cant;
+};
+
 void push(Nodo* &pila, int valor);
 int pop(Nodo* &pila);
 void agregar(Nodo*&cfte,Nodo*&cfin,int valor);
@@ -108,7 +134,118 @@ int main() {
     //     }
     // }
 
+    // Llevar cada elemnento de la lista a un vector (insertar ordenadamente)
+    // int vec[10];
+    // int len;
+    // Nodo* lista = NULL;
+    // int aux;
+    // while(lista != NULL) {
+    //     aux = eliminarPrimerNodo(lista);
+    //     insertarOrdenado(vec, len, aux);
+    // }
+
+    // Dada la lista con las novedades actualizar el stock del vector
+    // Producto vec[10];
+    // int len, pos, n;
+    // NodoP* novedades;
+    // NodoP* aux = novedades;
+    // while(aux != NULL) {
+    //     pos = buscarVectorP(vec, len, aux->info.id);
+    //     if(pos != -1) {
+    //         vec[pos].cant += aux->info.cant;
+    //     } else {
+    //         Producto nuevoProd;
+    //         nuevoProd.id = aux->info.id;
+    //         nuevoProd.cant = aux->info.cant;
+    //         agregarP(vec, n, len, nuevoProd);
+    //     }
+    //     aux = aux->sgte;
+    // }
+
+    // Existe un vector de Habitaciones y una lista de Reservas. Actualizar en el vector los campos cantidad de noches y cantidad de reservas
+    // Habitacion vec[10];
+    // int len;
+    // NodoH* lista;
+    // int pos;
+    // while(lista != NULL){
+    //     pos = buscar(vec, len, lista->info.idHabitacion);
+    //     if (pos != -1) {
+    //         vec[pos].cantN += lista->info.cantNoches;
+    //         vec[pos].cantReservas++;
+    //     } else {
+    //         cout << "No se encontro habitacion con ese id" << endl;
+    //     }
+    //     lista = lista->sgte;
+    // }
+
+    
     return 0;
+}
+
+void agregar(int arr[], int n, int& len, int v){
+	if(len < n){
+		arr[len] = v;
+		len++;
+	} else {
+		cout << "El vector esta lleno" << endl;
+	}
+}
+
+void agregarP(Producto arr[], int n, int& len, Producto v){
+	if(len < n){
+		arr[len] = v;
+		len++;
+	} else {
+		cout << "El vector esta lleno" << endl;
+	}
+}
+
+int eliminarPrimerNodo(Nodo*& lista){
+	int retorno = lista->info;
+	Nodo* aux = lista;
+	lista = aux->sgte;
+	delete aux;
+	return retorno;
+}
+
+void insertar(int arr[], int& len, int v, int pos){
+	
+	//for(int i = len-1; i >= pos; i--){
+	//	arr[i+1] = arr[i];
+	//}
+	
+	//Opción 2
+	for(int i = len; i > pos; i--){
+		arr[i]=arr[i-1];
+	}
+	
+	arr[pos] = v;
+	len++;
+}
+
+int insertarOrdenado(int arr[], int& len, int v){
+	int i = 0;
+	
+	while(i < len && arr[i] < v ){
+		i++;
+	} 
+	
+	insertar(arr,len,v,i);
+	
+	return i;
+}
+
+int buscaEInserta(int arr[], int& len, int v, bool& enc){
+	int pos = buscarVector(arr,len,v);
+	
+	if(pos == -1){
+		enc = false;
+		pos = insertarOrdenado(arr,len,v);
+	} else {
+		enc = true;
+	}
+	
+	return pos;
 }
 
 void push(Nodo* &pila, int valor) {
@@ -193,6 +330,23 @@ int buscarVector(int arr[], int len, int v) {
 	int i =0;
 	
 	while(i < len && arr[i] != v){
+		i++;
+	}
+	
+	if(i != len){ // i != len condición alternativa
+		pos = i;
+	} else {
+		pos = -1;
+	}
+	
+	return pos;	
+}
+
+int buscarVectorP(Producto arr[], int len, Producto v) {
+	int pos;
+	int i =0;
+	
+	while(i < len && arr[i].id != v.id){
 		i++;
 	}
 	
