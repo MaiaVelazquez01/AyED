@@ -6,10 +6,10 @@ struct Nodo {
     Nodo* sgte;
 };
 
-struct NodoP {
-    Producto info;
-    NodoP* sgte;
-};
+// struct NodoP {
+//     Producto info;
+//     NodoP* sgte;
+// };
 
 struct NodoH {
     Reserva info;
@@ -27,9 +27,40 @@ struct Reserva {
     int cantNoches;
 };
 
+// struct Producto {
+//     int id;
+//     int cant;
+// };
+
+struct Empleado {
+    int legajo;
+    int sueldo;
+};
+
+struct NodoE {
+    Empleado info;
+    NodoE* sgte;
+};
+
 struct Producto {
-    int id;
-    int cant;
+    int codigo;
+    char tipo;
+    int precio;
+};
+
+struct NodoP {
+    Producto info;
+    NodoP* sgte;
+};
+
+struct Alumno {
+    int legajo;
+    float promedio;
+};
+
+struct NodoA {
+    Alumno info;
+    NodoA* sgte;
 };
 
 void push(Nodo* &pila, int valor);
@@ -178,9 +209,146 @@ int main() {
     //     lista = lista->sgte;
     // }
 
-    
+    //Una empresa posee un archivo binario EMPLEADOS.dat que contiene registros con la siguiente información:
+    // legajo: número entero que identifica al empleado.
+    // sueldo: sueldo mensual.
+    // Se pide realizar un programa que ordene por número de legajo.
+    // FILE* Emp;
+    // Empleado raux;
+    // Emp = fopen("empleados.dat", "rb");
+    // NodoE* lista = NULL;
+    // fread(&raux, sizeof(struct Empleado), 1, Emp);
+    // while(!feof(Emp)) {
+    //     insertarOrdenado(lista, raux);
+    //     fread(&raux, sizeof(struct Empleado), 1, Emp);
+    // }
+    // fclose(Emp);
+    // Emp = fopen("empleados.dat", "wb");
+    // NodoE* aux = lista;
+    // while(aux != NULL) {
+    //     fwrite(&aux->info, sizeof(struct Empleado), 1, Emp);
+    //     aux = aux->sgte;
+    // }
+    // fclose(Emp);
+    // liberar(lista);
+
+    //Una tienda posee un archivo binario PRODUCTOS.dat cuyos registros contienen:
+    // codigo: código entero del producto.
+    // tipo: tipo de producto. (Char)
+    // precio: precio del producto.
+    // Se pide realizar un programa que lea todos los productos almacenados en el archivo y los ordene de menor a mayor precio.
+    // FILE* Prod;
+    // Producto raux;
+    // Prod = fopen("productos.dat", "rb");
+    // NodoP* lista = NULL;
+    // fread(&raux, sizeof(struct Producto), 1, Prod);
+    // while(!feof(Prod)) {
+    //     insertarOrdenado(lista, raux);
+    //     fread(&raux, sizeof(struct Producto), 1, Prod);
+    // }
+    // fclose(Prod);
+    // Prod = fopen("productos.dat", "wb");
+    // NodoP* aux = lista;
+    // while(aux != NULL) {
+    //     fwrite(&aux->info, sizeof(struct Producto), 1, Prod);
+    //     aux = aux->sgte;
+    // }
+    // fclose(Prod);
+    // liberar(lista);
+
+    // La universidad posee un archivo binario ALUMNOS.dat con registros que contienen:
+    // legajo: número entero del alumno.
+    // promedio: promedio general de la carrera.
+    // Se pide realizar un programa que ordene físicamente el archivo según el promedio de los alumnos, de mayor a menor.
+    // FILE* Alumnos;
+    // Alumno raux;
+    // Alumnos = fopen("alumnos.dat", "rb");
+    // NodoA* lista = NULL;
+    // fread(&raux, sizeof(struct Alumno), 1, Alumnos);
+    // while(!feof(Alumnos)) {
+    //     insertarOrdenado(lista, raux);
+    //     fread(&raux, sizeof(struct Alumno), 1, Alumnos);
+    // }
+    // fclose(Alumnos);
+    // Alumnos = fopen("alumnos.dat", "wb");
+    // NodoA* aux = lista;
+    // while(aux != NULL) {
+    //     fwrite(&aux->info, sizeof(struct Alumno), 1, Alumnos);
+    //     aux = aux->sgte;
+    // }
+    // fclose(Alumnos);
+    // liberar(lista);
+
+
     return 0;
 }
+
+NodoA* insertarOrdenado(NodoA*& lista, Alumno v) {
+	NodoA* nuevo = new NodoA();
+	nuevo->info = v;
+	nuevo->sgte = NULL;
+	NodoA* aux = lista;
+	NodoA* ant = NULL;
+	while(aux != NULL && aux->info.promedio >= v.promedio){
+		ant = aux;
+		aux = aux->sgte;
+	}
+	if(ant != NULL){
+		ant->sgte = nuevo;
+	} else {
+		lista = nuevo;
+	}
+	nuevo->sgte = aux;
+	return nuevo;
+}
+
+// NodoP* insertarOrdenado(NodoP*& lista, Producto v) {
+// 	NodoP* nuevo = new NodoP();
+// 	nuevo->info = v;
+// 	nuevo->sgte = NULL;
+// 	NodoP* aux = lista;
+// 	NodoP* ant = NULL;
+// 	while(aux != NULL && aux->info.precio <= v.precio){
+// 		ant = aux;
+// 		aux = aux->sgte;
+// 	}
+// 	if(ant != NULL){
+// 		ant->sgte = nuevo;
+// 	} else {
+// 		lista = nuevo;
+// 	}
+// 	nuevo->sgte = aux;
+// 	return nuevo;
+// }
+
+// Liberar va cabiando el tipo de nodo de acuerdo a cada ejercicio
+void liberar(NodoA*& lista) {
+	NodoA* aux;
+	while(lista != NULL) {
+		aux = lista;
+		lista = lista->sgte;
+		delete aux;
+	}
+}
+
+// NodoE* insertarOrdenado(NodoE*& lista, Empleado v) {
+// 	NodoE* nuevo = new NodoE();
+// 	nuevo->info = v;
+// 	nuevo->sgte = NULL;
+// 	NodoE* aux = lista;
+// 	NodoE* ant = NULL;
+// 	while(aux != NULL && aux->info.legajo <= v.legajo){
+// 		ant = aux;
+// 		aux = aux->sgte;
+// 	}
+// 	if(ant != NULL){
+// 		ant->sgte = nuevo;
+// 	} else {
+// 		lista = nuevo;
+// 	}
+// 	nuevo->sgte = aux;
+// 	return nuevo;
+// }
 
 void agregar(int arr[], int n, int& len, int v){
 	if(len < n){
@@ -342,19 +510,19 @@ int buscarVector(int arr[], int len, int v) {
 	return pos;	
 }
 
-int buscarVectorP(Producto arr[], int len, Producto v) {
-	int pos;
-	int i =0;
+// int buscarVectorP(Producto arr[], int len, Producto v) {
+// 	int pos;
+// 	int i =0;
 	
-	while(i < len && arr[i].id != v.id){
-		i++;
-	}
+// 	while(i < len && arr[i].id != v.id){
+// 		i++;
+// 	}
 	
-	if(i != len){ // i != len condición alternativa
-		pos = i;
-	} else {
-		pos = -1;
-	}
+// 	if(i != len){ // i != len condición alternativa
+// 		pos = i;
+// 	} else {
+// 		pos = -1;
+// 	}
 	
-	return pos;	
-}
+// 	return pos;	
+// }
